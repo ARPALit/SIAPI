@@ -1,0 +1,162 @@
+﻿@page
+@model Arpal.SiApi.WebApplication.Pages.DataHubModel
+@{
+    ViewData["Title"] = "SiApi-DataHub";
+}
+<div class="container">
+    <div class="row">
+        <div class="co-md-12">
+            <h1>@Html.Raw(Model.Label_DataHub_Title)</h1>
+            <h5>@Html.Raw(Model.Label_DataHub_SubTitle)</h5>
+            @Html.Raw(Model.Label_DataHub_Text_01)
+            @Html.Raw(Model.Label_DataHub_Text_02)
+        </div>
+        <div class="co-md-12" style="margin-top: 10px">
+            <form class="row g-3">
+                <div class="col-md-6">
+                    <div class="mb-3">
+                        <div class="input-group">
+                            <input id="SearchString" name="SearchString" asp-for="SearchString" type="text" class="form-control"
+                                   placeholder="Ricerca nel DataHUB"
+                                   style="border-right: none"
+                                   value="@Model.SearchString">
+                            <span class="input-group-text" id="basic-addon2" style="background-color: #ffffff;"><i class="fa-solid fa-magnifying-glass"></i></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <button type="submit" class="btn btn-primary mb-3" style="width: 90%">CERCA</button>
+                </div>
+            </form>
+            <div class="accordion" id="accordionExample">
+                @if (Model.Servizi != null)
+                    foreach (var servizio in Model.Servizi)
+                    {
+                        var accordionBg = $"background-color: {Model.AccordionServizio_BackgroundColor}";
+                        var apiRequired = "";
+                        var urlDynamic = $"{HttpContext.Request.Scheme}//{HttpContext.Request.Host}/Service/Query/{servizio.NomeServizio}";
+                        var url = $"{Model.BaseUrl}Service/Query/{servizio.NomeServizio}";
+                        if (servizio.ApikeyRequired == "Y")
+                        {
+                            apiRequired = "ApiKey richiesto";
+                            url += "?ApiKey=myApiKey";
+                            urlDynamic += "?ApiKey=myApiKey";
+                        }
+
+                        <div class="accordion-item" style="margin-bottom: 3px">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#servizio{@servizio.IdServizio}"
+                                        aria-expanded="false" aria-controls="servizio{@servizio.IdServizio}"
+                                        style="display: flex; align-items: center;">
+                                    <span style="flex-grow: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;">
+                                        <span style="font-weight: 600">@servizio.NomeServizio</span>&nbsp- @servizio.DescServizio
+                                    </span>
+                                </button>
+                            </h2>
+                            <div id="servizio{@servizio.IdServizio}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body" style="@accordionBg">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="descrizione" class="form-label">Descrizione</label>
+                                                <textarea class="form-control" id="descrizione" readonly rows="3">@servizio.DescServizio</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="help" class="form-label">Help</label>
+                                                <textarea class="form-control" id="help" readonly rows="3">@servizio.HelpServizio</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label for="link" class="form-label">
+                                                    @if (!String.IsNullOrWhiteSpace(apiRequired))
+                                                    {
+                                                        <span>Link (@apiRequired):</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span>Link:</span>
+                                                    }
+                                                </label>
+                                                <a class="link-opacity-50-hover" id="link" href="@url" target="_blank">@url</a>
+                                            </div>
+                                        </div>
+                                        @if (servizio.SiapiServiziParametris?.Count > 0)
+                                        {
+                                            <div class="col-md-12">
+                                                <label class="form-label">Parametri</label>
+                                                <table class="table table-sm table-striped table-bordered table-hover">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col" style="font-weight: normal">Nome</th>
+                                                            <th scope="col" style="font-weight: normal">Tipo</th>
+                                                            <th scope="col" style="font-weight: normal">Obbligatorio</th>
+                                                            <th scope="col" style="font-weight: normal">Help</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        @foreach (var parametro in servizio.SiapiServiziParametris.OrderBy(c => c.UserField))
+                                                        {
+                                                            <tr>
+                                                                <td>@parametro.UserField</td>
+                                                                <td>@parametro.Datatype</td>
+                                                                <td>@(parametro.Mandatory == "Y" ? "SI" : "NO")</td>
+                                                                <td>@(parametro.HelpParametro ?? "")</td>
+                                                            </tr>
+                                                        }
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                @if (Model.Links != null)
+                    foreach (var link in Model.Links)
+                    {
+                        var url = link.Link;
+                        if (!String.IsNullOrEmpty(link.Link))
+                        {
+                            if (link.Link.ToLower().IndexOf("http") < 0)
+                                url = $"http://{url}";
+                        }
+
+                        <div class="accordion-item" style="margin-bottom: 3px">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#link{@link.IdLink}" aria-expanded="false" aria-controls="link{@link.IdLink}">
+                                    @link.NomeLink
+                                </button>
+                            </h2>
+                            <div id="link{@link.IdLink}" class="accordion-collapse collapse" data-bs-parent="#accordionExample">
+                                <div class="accordion-body">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="descrizione" class="form-label">Descrizione</label>
+                                                <textarea class="form-control" id="descrizione" readonly rows="3">@link.DescLink</textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="mb-3">
+                                                <label for="help" class="form-label">Help</label>
+                                                <textarea class="form-control" id="help" readonly rows="3">@link.HelpLink</textarea>
+                                            </div>
+                                        </div> <div class="col-md-12">
+                                            <div class="mb-3">
+                                                <label for="link" class="form-label">Link</label>
+                                                <p><a class="link-opacity-50-hover" id="link" href="@url" target="_blank"> @url</a></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+            </div>
+        </div>
+    </div>
+</div>

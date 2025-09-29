@@ -1,0 +1,30 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>SiApi</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link href="/lib/bootstrap-5.3.3/css/bootstrap.css" rel="stylesheet" />
+    <link href="/lib/fontawesome-free-6.5.2-web/css/all.css" rel="stylesheet" />
+</head>
+<body>
+    <script src="/lib/bootstrap-5.3.3/js/bootstrap.bundle.js"></script>
+    <header>
+        <nav class="navbar bg-body-tertiary" style="background-color: white!important; color: #0B549E">
+            <div class="container-fluid" style="background-color: white">
+                <a class="navbar-brand" href="#">
+                    <img src="/Arpal_image.png" alt="ARPAL" height="70">
+                </a>
+            </div>
+        </nav>
+    </header>
+
+    <div class="container-fluid" style="margin-top: 10px">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
