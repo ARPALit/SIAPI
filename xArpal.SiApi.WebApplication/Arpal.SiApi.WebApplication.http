@@ -1,0 +1,6 @@
+@Arpal.SiApi.WebApplication_HostAddress = http://localhost:5110
+
+GET {{Arpal.SiApi.WebApplication_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
