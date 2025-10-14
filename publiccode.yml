@@ -1,0 +1,42 @@
+publiccodeYmlVersion: 0.4.0
+name: SIAPI
+url: https://github.com/ARPALit/SIAPI
+landingURL: https://aws.arpal.liguria.it/siapi/datahub
+softwareVersion: "1.0"
+releaseDate: 2025-01-01
+platforms:
+  - web
+categories:
+  - data-visualization
+usedBy:
+  - ARPAL Agenzia Regionale Protezione Ambiente Ligure
+developmentStatus: stable
+softwareType: standalone/web
+description:
+  it:
+    localisedName: SIAPI
+    shortDescription: sistema per la pubblicazione di API per la fruizione di dati
+      attinti da database oracle
+    longDescription: Un portale dedicato alla condivisione e alla fruizione di dati
+      aperti (Open Data) prodotti da ARPAL. Vengono resi disponibili in formato
+      digitale, ad esempio JSON, diversi dataset relativi a vari ambiti
+      ambientali, consentendo di consultarli e scaricarli gratuitamente.
+      L'obiettivo è promuovere la trasparenza e facilitare l'accesso alle
+      informazioni ambientali.
+    documentation: https://aws.arpal.liguria.it/siapi/datahub
+    apiDocumentation: https://aws.arpal.liguria.it/siapi/swagger/index.html
+    features:
+      - pubblicazione dati
+legal:
+  license: AGPL-1.0-or-later
+maintenance:
+  type: internal
+  contacts:
+    - name: Marco Poddine
+      email: sii@arpal.liguria.it
+      phone: "0106437666"
+      affiliation: ARPAL
+localisation:
+  localisationReady: false
+  availableLanguages:
+    - it
